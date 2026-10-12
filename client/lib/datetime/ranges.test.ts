@@ -59,6 +59,10 @@ describe('getPresetRange', () => {
     expect([range.days[0], range.days.at(-1), range.days.length]).toEqual([first, last, count]);
   });
 
+  it('labels last week with its date span in Portuguese', () => {
+    expect(getPresetRange('lastWeek').label).toBe('Semana passada (5 out – 11 out)');
+  });
+
   it('tags each range with the preset that produced it', () => {
     expect(getPresetRange('lastWeek').presetId).toBe('lastWeek');
   });

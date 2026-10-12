@@ -1,4 +1,5 @@
 import { parseISO, startOfDay, subDays } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { formatInTimeZone, fromZonedTime } from 'date-fns-tz';
 
 export const TIMEZONE = 'America/Sao_Paulo';
@@ -10,7 +11,7 @@ export function toUtcISO(value: Date | string): string {
 
 export function formatLocal(date: string | Date, formatStr: string): string {
   const parsed = typeof date === 'string' ? parseISO(date) : date;
-  return formatInTimeZone(parsed, TIMEZONE, formatStr);
+  return formatInTimeZone(parsed, TIMEZONE, formatStr, { locale: ptBR });
 }
 
 export function localPartsToUtcISO(date: string, time: string): string {

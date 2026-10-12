@@ -1,5 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { formatGroupLabel, formatWeekBucketLabel, weekStartKeyForDay } from './labels';
+import {
+  formatDayHeader,
+  formatGroupLabel,
+  formatWeekBucketLabel,
+  weekStartKeyForDay,
+} from './labels';
 
 // Wednesday 2026-10-14, 12:00 in São Paulo (UTC-3).
 beforeEach(() => {
@@ -38,5 +43,15 @@ describe('formatWeekBucketLabel', () => {
 
   it('names the previous week "Semana passada"', () => {
     expect(formatWeekBucketLabel('2026-10-05')).toBe('Semana passada');
+  });
+
+  it('shows the Monday–Sunday span in Portuguese for older weeks', () => {
+    expect(formatWeekBucketLabel('2026-09-28')).toBe('28 set – 4 out');
+  });
+});
+
+describe('formatDayHeader', () => {
+  it('writes the weekday and month in Portuguese', () => {
+    expect(formatDayHeader('2026-10-08')).toBe('quinta-feira, 8 de outubro');
   });
 });
