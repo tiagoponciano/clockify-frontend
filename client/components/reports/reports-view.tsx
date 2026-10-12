@@ -36,7 +36,7 @@ export function ReportsView() {
   const projectsQuery = useProjects();
   const usersQuery = useUsers(canSeeTeam);
 
-  const projectItems = byProjectQuery.data ?? [];
+  const projectItems = useMemo(() => byProjectQuery.data ?? [], [byProjectQuery.data]);
   const totalSeconds = useMemo(
     () => projectItems.reduce((total, item) => total + item.totalSeconds, 0),
     [projectItems],
