@@ -3,7 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { ProjectCombobox } from '@/components/timer/project-combobox';
 import { TagSelector } from '@/components/timer/tag-selector';
 import { Button } from '@/components/ui/button';
@@ -24,40 +23,8 @@ import {
   getManualEntryMinDate,
   localPartsToUtcISO,
 } from '@/lib/datetime';
-
-const schema = z
-  .object({
-    description: z.string().optional(),
-    projectId: z.string().min(1, 'Selecione um projeto.'),
-    tagIds: z.array(z.string()),
-    date: z.string().min(1, 'Informe a data'),
-    startTime: z.string().min(1, 'Informe o início'),
-    endTime: z.string().min(1, 'Informe o fim'),
-  })
-  .superRefine((data, ctx) => {
-    const startedAt = localPartsToUtcISO(data.date, data.startTime);
-    const endedAt = localPartsToUtcISO(data.date, data.endTime);
-    const startMs = new Date(startedAt).getTime();
-    const endMs = new Date(endedAt).getTime();
-    const now = Date.now();
-    const min = getManualEntryMinDate().getTime();
-
-    if (startMs > now) {
-      ctx.addIssue({ code: 'custom', message: 'A data de início não pode estar no futuro.', path: ['date'] });
-    }
-    if (startMs < min) {
-      ctx.addIssue({ code: 'custom', message: 'A data de início não pode ser anterior a 10 dias.', path: ['date'] });
-    }
-    if (endMs <= startMs) {
-      ctx.addIssue({ code: 'custom', message: 'O fim deve ser depois do início.', path: ['endTime'] });
-    }
-    const durationHours = (endMs - startMs) / (1000 * 60 * 60);
-    if (durationHours > 24) {
-      ctx.addIssue({ code: 'custom', message: 'A duração máxima é de 24 horas.', path: ['endTime'] });
-    }
-  });
-
-type FormValues = z.infer<typeof schema>;
+import { ManualEntryIntervalFields } from './manual-entry-interval-fields';
+import { manualEntrySchema, type ManualEntryFormValues } from './manual-entry-schema';
 
 interface ManualEntryDialogProps {
   open: boolean;
@@ -77,8 +44,8 @@ export function ManualEntryDialog({ open, onOpenChange, onSubmit }: ManualEntryD
   const maxDate = formatLocal(getManualEntryMaxDate(), 'yyyy-MM-dd');
   const nowTime = formatLocal(new Date(), 'HH:mm');
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
+  const form = useForm<ManualEntryFormValues>({
+    resolver: zodResolver(manualEntrySchema),
     defaultValues: {
       description: '',
       projectId: '',
@@ -177,34 +144,12 @@ export function ManualEntryDialog({ open, onOpenChange, onSubmit }: ManualEntryD
             </div>
           </div>
 
-          <div className="rounded-lg border border-border bg-muted/30 p-4">
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <p className="text-sm font-medium">Intervalo</p>
-              <p className="font-mono text-sm tabular-nums text-muted-foreground">
-                {previewDuration ? `Duração ${previewDuration}` : '—'}
-              </p>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div className="space-y-2">
-                <Label htmlFor="manual-date">Data</Label>
-                <Input id="manual-date" type="date" min={minDate} max={maxDate} {...form.register('date')} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="manual-start">Início</Label>
-                <Input id="manual-start" type="time" {...form.register('startTime')} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="manual-end">Fim</Label>
-                <Input id="manual-end" type="time" {...form.register('endTime')} />
-              </div>
-            </div>
-            {form.formState.errors.date ? (
-              <p className="mt-2 text-sm text-destructive">{form.formState.errors.date.message}</p>
-            ) : null}
-            {form.formState.errors.endTime ? (
-              <p className="mt-2 text-sm text-destructive">{form.formState.errors.endTime.message}</p>
-            ) : null}
-          </div>
+          <ManualEntryIntervalFields
+            form={form}
+            previewDuration={previewDuration}
+            minDate={minDate}
+            maxDate={maxDate}
+          />
 
           <DialogFooter className="gap-2 border-t border-border pt-4 sm:justify-between">
             <p className="hidden text-xs text-muted-foreground sm:block">
