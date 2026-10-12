@@ -30,9 +30,12 @@ export function AuthSplitLayout({ children }: { children: ReactNode }) {
         </div>
       </div>
       <div className="relative hidden overflow-hidden bg-muted lg:block">
-        <img
+        <Image
           src="/images/neo-team.jpg"
           alt="Equipe NEO"
+          fill
+          priority
+          sizes="50vw"
           className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
         <div className="absolute top-4 right-4 z-10">
