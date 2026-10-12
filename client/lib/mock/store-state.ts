@@ -1,5 +1,6 @@
 import type { TimeEntry, User } from '@/types/api';
-import { MOCK_PROJECTS, MOCK_TAGS, MOCK_USERS, createMockEntries } from './data';
+import { MOCK_PROJECTS, MOCK_TAGS, MOCK_USERS } from './data';
+import { createMockEntries } from './mock-entries';
 
 const STORAGE_KEY = 'clockify.mock.store.v2';
 
