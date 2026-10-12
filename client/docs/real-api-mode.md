@@ -12,7 +12,7 @@ With `NEXT_PUBLIC_USE_MOCK_API=false`, `apiFetch` calls `NEXT_PUBLIC_API_URL` (d
 |---------|----------|
 | Mock switch | `NEXT_PUBLIC_USE_MOCK_API` in `client/.env` |
 | API base | `NEXT_PUBLIC_API_URL` |
-| Response adapters | `client/lib/api-mappers.ts` used from `queries.ts` / auth |
+| Response adapters | `client/lib/api-mappers/` (one file per resource) used from `queries.ts` / auth |
 | Mock bootstrap | `MockBootstrap` only injects a token when mock mode is on |
 
 ## Contract mapping (FE ← BE)

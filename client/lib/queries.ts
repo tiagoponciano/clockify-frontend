@@ -1,6 +1,5 @@
 import { apiFetch, buildQuery, jsonBody } from '@/lib/api';
 import {
-  mapBackendUser,
   mapBackendUsers,
   mapClientRecord,
   mapPaginatedTimeEntries,

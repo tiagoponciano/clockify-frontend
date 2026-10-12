@@ -1,4 +1,3 @@
-import { Slot } from '@radix-ui/react-slot';
 import type { InputHTMLAttributes } from 'react';
 import { cn } from './cn';
 

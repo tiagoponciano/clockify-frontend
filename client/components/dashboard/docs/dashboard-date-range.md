@@ -20,7 +20,7 @@ The dashboard and reports headers expose a Clockify-style period control: preset
 | `Calendar` | `client/components/ui/calendar.tsx` | DayPicker wrapper (`weekStartsOn={1}`) |
 | `useDashboard` | `client/hooks/use-dashboard.ts` | Holds `range` state; passes `from`/`to` to APIs |
 | `ReportsView` | `client/components/reports/reports-view.tsx` | Holds the Reports `range` state; passes `from`/`to` to summary queries |
-| Helpers | `client/lib/datetime.ts` | `getPresetRange`, `getCustomRange`, `DATE_RANGE_PRESETS` |
+| Helpers | `client/lib/datetime/ranges.ts` | `getPresetRange`, `getCustomRange`, `DATE_RANGE_PRESETS` |
 
 Controlled API:
 
